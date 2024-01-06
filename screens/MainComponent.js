@@ -1,4 +1,4 @@
-import { Image, Text, Platform, StyleSheet, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import Constants from "expo-constants";
 import CampsiteInfoScreen from "./CampsiteInfoScreen";
 import DirectoryScreen from "./DirectoryScreen";
@@ -12,7 +12,13 @@ import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";
 import ContactScreen from "./ContactScreen";
 import { Icon } from "react-native-elements";
-import logo from "../assets/images/Camptime_Logo.png";
+import logo from "../assets/images/logo.png";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchPartners } from "../features/partners/partnersSlice";
+import { fetchCampsites } from "../features/campsites/campsitesSlice";
+import { fetchPromotions } from "../features/promotions/promotionsSlice";
+import { fetchComments } from "../features/comments/commentsSlice";
 
 const Drawer = createDrawerNavigator();
 
@@ -126,7 +132,7 @@ const CustomDrawerContent = (props) => (
         <Image source={logo} style={styles.drawerImage} />
       </View>
       <View style={{ flex: 2 }}>
-        <Text style={styles.drawerHeaderText}>Camptime</Text>
+        <Text style={styles.drawerHeaderText}>NuCamp</Text>
       </View>
     </View>
     <DrawerItemList {...props} labelStyle={{ fontWeight: "bold" }} />
@@ -134,6 +140,15 @@ const CustomDrawerContent = (props) => (
 );
 
 const Main = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCampsites());
+    dispatch(fetchPromotions());
+    dispatch(fetchPartners());
+    dispatch(fetchComments());
+  }, [dispatch]);
+
   return (
     <View
       style={{
@@ -217,12 +232,17 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   drawerHeader: {
-    backgroundColor: "#5636DD",
+    backgroundColor: "#5637DD",
     height: 140,
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
     flexDirection: "row",
+  },
+  drawerHeaderText: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
   },
   drawerImage: {
     margin: 10,
